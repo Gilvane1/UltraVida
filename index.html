@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Chamada de Senhas - Clínica ULTRAVIDA</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Tela de Login -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-container">
+            <div class="login-header">
+                <div class="logo-container">
+                    <div class="logo-icon"><img src="logo.png" alt="Logo Clínica Ultravida"></div>
+                    <h1 class="clinic-name">CLÍNICA ULTRAVIDA</h1>
+                    <p class="clinic-subtitle">Sistema de Chamada de Senhas</p>
+                </div>
+            </div>
+            
+            <div class="login-form">
+                <div class="form-group">
+                    <label for="username">Usuário:</label>
+                    <input type="text" id="username" placeholder="Digite seu usuário" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Senha:</label>
+                    <div class="password-container">
+                        <input type="password" id="password" placeholder="Digite sua senha" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword()">
+                            <span id="eyeIcon">👁️</span>
+                        </button>
+                    </div>
+                </div>
+                <button type="button" class="btn-login" onclick="login()">
+                    <span class="btn-text">ENTRAR</span>
+                    <div class="btn-glow"></div>
+                </button>
+            </div>
+            
+            <div class="login-footer">
+                <p>Desenvolvedor: TI Gilvane C Benavenuto</p>
+                <p>86 99911 7717</p>
+            </div>
+        </div>
+        
+        <!-- Partículas de fundo -->
+        <div class="particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+    </div>
+
+    <!-- Sistema Principal -->
+    <div class="main-system" id="mainSystem" style="display: none;">
+        <!-- Header Futurista -->
+        <header class="futuristic-header">
+            <div class="header-content">
+                <div class="clinic-info">
+                  <div class="clinic-logo">
+                    <div class="logo-pulse"><img src="logo.png" alt="Logo Ultravida" style="width: 50px; height: 50px; object-fit: contain;"></div>
+                    <div class="clinic-details">
+                        <h1 class="clinic-title">CLÍNICA ULTRAVIDA</h1>
+                        <p class="clinic-location">Piracuruca • (86) 99985-2080 • Rua Senador Gervásio, Centro</p>
+                    </div>
+                </div>                    </div>
+                </div>
+                
+                <div class="header-status">
+                    <div class="time-display">
+                        <div class="time-label">HORÁRIO ATUAL</div>
+                        <div class="time-value" id="clock">00:00:00</div>
+                    </div>
+                    <div class="developer-badge">
+                        <div class="dev-label">DESENVOLVEDOR</div>
+                        <div class="dev-name">TI Gilvane C Benavenuto</div>
+                        <div class="dev-contact">86 99911 7717</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Linha de energia -->
+            <div class="energy-line"></div>
+        </header>
+
+        <!-- Área Principal -->
+        <main class="main-content">
+            <!-- Painel de Senha Atual -->
+            <section class="current-call-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">CHAMADA ATUAL</h2>
+                    <div class="status-indicator active"></div>
+                </div>
+                
+                <div class="call-display">
+                    <div class="patient-name-display" id="currentPatient">---</div>
+                    <div class="call-details">
+                        <div class="detail-item">
+                            <span class="detail-label">PROFISSIONAL:</span>
+                            <span class="detail-value" id="currentProfessional">---</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">LOCAL:</span>
+                            <span class="detail-value" id="currentOffice">---</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Efeitos visuais -->
+                <div class="hud-elements">
+                    <div class="hud-corner top-left"></div>
+                    <div class="hud-corner top-right"></div>
+                    <div class="hud-corner bottom-left"></div>
+                    <div class="hud-corner bottom-right"></div>
+                </div>
+            </section>
+
+            <!-- Histórico de Chamadas -->
+            <section class="call-history">
+                <div class="section-header">
+                    <h3 class="section-title">ÚLTIMAS CHAMADAS</h3>
+                    <div class="section-line"></div>
+                </div>
+                
+                <div class="history-container" id="recentCalls">
+                    <div class="no-calls">Nenhuma chamada realizada ainda</div>
+                </div>
+            </section>
+
+            <!-- Grid de Consultórios -->
+            <section class="offices-grid">
+                <div class="section-header">
+                    <h3 class="section-title">CONSULTÓRIOS</h3>
+                    <div class="section-line"></div>
+                </div>
+                
+                <div class="offices-container" id="officesContainer">
+                    <!-- Consultórios serão inseridos dinamicamente -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Barra de Controle Inferior -->
+        <footer class="control-bar">
+            <div class="control-content">
+                <button class="control-btn config-btn" onclick="openConfigPanel()">
+                    <div class="btn-icon">⚙️</div>
+                    <span class="btn-label">CONFIGURAÇÕES</span>
+                    <div class="btn-pulse"></div>
+                </button>
+                
+                <button class="control-btn logout-btn" onclick="logout()">
+                    <div class="btn-icon">🚪</div>
+                    <span class="btn-label">SAIR</span>
+                    <div class="btn-pulse"></div>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Sistema de Chamada de Senhas - Clínica ULTRAVIDA
+        class PasswordSystem {
+            constructor() {
+                this.currentPassword = 0;
+                this.offices = [
+                    { number: 1, name: "Cardiologia", doctor: "Dr. João Silva", color: "#C41E3A", queue: [], currentPatient: null },
+                    { number: 2, name: "Pediatria", doctor: "Dra. Maria Santos", color: "#28a745", queue: [], currentPatient: null },
+                    { number: 3, name: "Ortopedia", doctor: "Dr. Carlos Lima", color: "#fd7e14", queue: [], currentPatient: null },
+                    { number: 4, name: "Dermatologia", doctor: "Dra. Ana Costa", color: "#6f42c1", queue: [], currentPatient: null },
+                    { number: 5, name: "Clínica Geral", doctor: "Dr. Pedro Oliveira", color: "#17a2b8", queue: [], currentPatient: null }
+                ];
+                this.recentCalls = [];
+                this.currentUser = null;
+                this.isLoggedIn = false;
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.updateClock();
+                this.renderOffices();
+                this.updateDisplay();
+            }
+
+            setupEventListeners() {
+                const usernameInput = document.getElementById('username');
+                const passwordInput = document.getElementById('password');
+                
+                if (usernameInput) {
+                    usernameInput.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter') this.login();
+                    });
+                }
+                
+                if (passwordInput) {
+                    passwordInput.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter') this.login();
+                    });
+                }
+            }
+
+            login() {
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+
+                if (username === 'admin' && password === '123456') {
+                    this.currentUser = username;
+                    this.isLoggedIn = true;
+                    this.showMainSystem();
+                    alert('Login realizado com sucesso!');
+                } else {
+                    alert('Usuário ou senha incorretos!');
+                }
+            }
+
+            logout() {
+                if (confirm('Tem certeza que deseja sair do sistema?')) {
+                    this.currentUser = null;
+                    this.isLoggedIn = false;
+                    this.showLoginScreen();
+                }
+            }
+
+            showLoginScreen() {
+                document.getElementById('loginScreen').style.display = 'flex';
+                document.getElementById('mainSystem').style.display = 'none';
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+            }
+
+            showMainSystem() {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainSystem').style.display = 'block';
+                this.updateDisplay();
+            }
+
+            updateClock() {
+                const clockElement = document.getElementById('clock');
+                if (clockElement) {
+                    const now = new Date();
+                    clockElement.textContent = now.toLocaleTimeString('pt-BR');
+                }
+                setTimeout(() => this.updateClock(), 1000);
+            }
+
+            updateDisplay() {
+                this.updateRecentCalls();
+                this.renderOffices();
+            }
+
+            updateRecentCalls() {
+                const container = document.getElementById('recentCalls');
+                if (!container) return;
+
+                if (this.recentCalls.length === 0) {
+                    container.innerHTML = '<div class="no-calls">Nenhuma chamada realizada ainda</div>';
+                    return;
+                }
+
+                container.innerHTML = this.recentCalls.map(call => `
+                    <div class="history-item">
+                        <div class="history-number">${call.password}</div>
+                        <div class="history-details">
+                            <div class="history-patient">${call.patient}</div>
+                            <div class="history-office">${call.office}</div>
+                        </div>
+                        <div class="history-time">${call.time}</div>
+                    </div>
+                `).join('');
+            }
+
+            renderOffices() {
+                const container = document.getElementById('officesContainer');
+                if (!container) return;
+
+                container.innerHTML = '';
+                this.offices.forEach(office => {
+                    const card = document.createElement('div');
+                    card.className = 'office-card';
+                    card.innerHTML = `
+                        <div class="office-header">
+                            <div class="office-number">${office.number}</div>
+                            <div class="queue-badge">${office.queue.length} na fila</div>
+                        </div>
+                        <div class="office-name">${office.name}</div>
+                        <div class="office-doctor">${office.doctor}</div>
+                        <div class="office-actions">
+                            <button onclick="callNextPatient(${office.number})" class="action-btn call-btn">Chamar</button>
+                            <button onclick="editOffice(${office.number})" class="action-btn edit-btn">Editar</button>
+                            <button onclick="deleteOffice(${office.number})" class="action-btn delete-btn">Excluir</button>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+
+            callNextPatient(officeNumber) {
+                const office = this.offices.find(o => o.number === parseInt(officeNumber));
+                if (!office || office.queue.length === 0) {
+                    alert('Não há pacientes na fila!');
+                    return;
+                }
+
+                this.currentPassword++;
+                const patient = office.queue.shift();
+                office.currentPatient = patient;
+
+                document.getElementById('currentPatient').textContent = patient.name.toUpperCase();
+                document.getElementById('currentProfessional').textContent = office.doctor;
+                document.getElementById('currentOffice').textContent = office.name;
+
+                this.recentCalls.unshift({
+                    password: this.currentPassword,
+                    patient: patient.name.toUpperCase(),
+                    office: office.name,
+                    time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+                });
+
+                if (this.recentCalls.length > 10) {
+                    this.recentCalls = this.recentCalls.slice(0, 10);
+                }
+
+                this.updateDisplay();
+                alert(`${patient.name} chamado para ${office.name}!`);
+            }
+        }
+
+        // Criar instância global
+        let passwordSystem;
+
+        // Funções globais
+        function login() {
+            passwordSystem.login();
+        }
+
+        function logout() {
+            passwordSystem.logout();
+        }
+
+        function openConfigPanel() {
+            alert('Painel de configurações em desenvolvimento');
+        }
+
+        // Função para mostrar/ocultar senha
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.textContent = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.textContent = '👁️';
+            }
+        }
+
+        // Inicializar quando a página carregar
+        document.addEventListener('DOMContentLoaded', () => {
+            passwordSystem = new PasswordSystem();
+        });
+    </script>
+</body>
+</html>
+
+
+        // Funções globais
+        function login() {
+            passwordSystem.login();
+        }
+
+        function logout() {
+            passwordSystem.logout();
+        }
+
+        function openConfigPanel() {
+            alert('Painel de configurações em desenvolvimento');
+        }
+
+        function callNextPatient(officeNumber) {
+            passwordSystem.callNextPatient(officeNumber);
+        }
+
+        function editOffice(officeNumber) {
+            alert(`Editar consultório ${officeNumber} - Em desenvolvimento`);
+        }
+
+        function deleteOffice(officeNumber) {
+            if (confirm(`Excluir consultório ${officeNumber}?`)) {
+                passwordSystem.offices = passwordSystem.offices.filter(o => o.number !== officeNumber);
+                passwordSystem.renderOffices();
+                alert('Consultório excluído!');
+            }
+        }
+
+        // Função para mostrar/ocultar senha
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.textContent = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.textContent = '👁️';
+            }
+        }
+
+        // Inicializar quando a página carregar
+        document.addEventListener('DOMContentLoaded', () => {
+            passwordSystem = new PasswordSystem();
+        });
+    </script>
+</body>
+</html>
+
